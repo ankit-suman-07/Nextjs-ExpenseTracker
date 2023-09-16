@@ -1,95 +1,70 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+import React, { useState } from "react";
 
 export default function Home() {
+  const [expense, setExpense] = useState(["apple", "ball", "cat"]);
+  const [amount, setAmount] = useState([23.45, 54.67, 435]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const newItem = e.target.elements[0].value; // Use 'name' attribute as the key
+    const newAmount = e.target.elements[1].value; // Use 'name' attribute as the key
+
+    console.log("eeeeee",e)
+    console.log("item - " + newItem);
+    console.log("Amount - " + newAmount);
+
+    // Check if the new item is empty
+    if (!newItem) {
+      return;
+    }
+
+    // Check if the new amount is a valid number
+    if (isNaN(newAmount)) {
+      return;
+    }
+
+    // Add the new item to the expense and amount arrays
+    setExpense((prevExpense) => [...prevExpense, newItem]);
+    setAmount((prevAmount) => [...prevAmount, parseFloat(newAmount)]);
+
+    // Clear the form fields
+    e.target.elements[0].value = "";
+    e.target.elements[1].value = "";
+  };
+
+  // const handleChange=(e)=>{
+  //   e.preventDefault();
+  //   console.log("eee",e)
+  //   if(e.target.name==='item'){
+  //     setExpense((prevExpense) => [...prevExpense, e.target.value]);
+  //   }
+  //   if(e.target.name==='amount'){
+  //     setAmount((prevAmount) => [...prevAmount, parseFloat(e.target.value)]);
+  //   }
+
+  // }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
+    <main>
+      <div>
+        <h3>Expense Tracker</h3>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          <form onSubmit={handleFormSubmit}>
+            <input type='text' placeholder='Enter Item' name='item' />
+            <input type='text' placeholder='Enter Amount' name='amount'/>
+            <button type='submit'>Add</button>
+          </form>
+        </div>
+        <div>
+          {expense.map((item, idx) => (
+            <div key={idx}>
+              {item} - {amount[idx]}
+            </div>
+          ))}
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
-  )
+  );
 }
