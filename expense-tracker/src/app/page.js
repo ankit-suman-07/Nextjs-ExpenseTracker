@@ -1,59 +1,56 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { signInWithPopup } from "firebase/auth";
+import { app, auth, provider } from "@/firebase/firebaseConfig"; // Import auth and provider directly from Firebase
 
 export default function Home() {
-  const [expense, setExpense] = useState(["apple", "ball", "cat"]);
-  const [amount, setAmount] = useState([23.45, 54.67, 435]);
+  const [expense, setExpense] = useState([]);
+  const [amount, setAmount] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [user, setUser] = useState(null);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    const newItem = e.target.elements[0].value; // Use 'name' attribute as the key
-    const newAmount = e.target.elements[1].value; // Use 'name' attribute as the key
+    const newItem = e.target.elements.item.value;
+    const newAmount = e.target.elements.amount.value;
 
-    console.log("eeeeee",e)
-    console.log("item - " + newItem);
-    console.log("Amount - " + newAmount);
-
-    // Check if the new item is empty
-    if (!newItem) {
+    if (!newItem || isNaN(newAmount)) {
       return;
     }
 
-    // Check if the new amount is a valid number
-    if (isNaN(newAmount)) {
-      return;
-    }
-
-    // Add the new item to the expense and amount arrays
     setExpense((prevExpense) => [...prevExpense, newItem]);
     setAmount((prevAmount) => [...prevAmount, parseFloat(newAmount)]);
+    setTotal(total + parseFloat(newAmount));
 
-    // Clear the form fields
-    e.target.elements[0].value = "";
-    e.target.elements[1].value = "";
+    e.target.elements.item.value = "";
+    e.target.elements.amount.value = "";
   };
 
-  // const handleChange=(e)=>{
-  //   e.preventDefault();
-  //   console.log("eee",e)
-  //   if(e.target.name==='item'){
-  //     setExpense((prevExpense) => [...prevExpense, e.target.value]);
-  //   }
-  //   if(e.target.name==='amount'){
-  //     setAmount((prevAmount) => [...prevAmount, parseFloat(e.target.value)]);
-  //   }
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      setUser(user);
+    });
+  }, []);
 
-  // }
+  const signIn = () => signInWithPopup(auth, provider);
+  const signOut = () => auth.signOut();
 
   return (
     <main>
       <div>
         <h3>Expense Tracker</h3>
         <div>
+          <button onClick={signIn}>Sign In</button>
+          <button onClick={signOut}>Sign Out</button>
+        </div>
+        <div>
+          {user ? <span>{user.displayName}</span> : "No User"}
+        </div>
+        <div>
           <form onSubmit={handleFormSubmit}>
             <input type='text' placeholder='Enter Item' name='item' />
-            <input type='text' placeholder='Enter Amount' name='amount'/>
+            <input type='text' placeholder='Enter Amount' name='amount' />
             <button type='submit'>Add</button>
           </form>
         </div>
@@ -64,6 +61,7 @@ export default function Home() {
             </div>
           ))}
         </div>
+        Total: {total}
       </div>
     </main>
   );
