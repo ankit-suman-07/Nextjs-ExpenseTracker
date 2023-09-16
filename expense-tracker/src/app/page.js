@@ -1,8 +1,10 @@
 'use client'
 import React, { useState, useEffect } from "react";
+import { fetchDataFromFirestore } from "../firebase/firebaseDB";
 import SignIn from "./SignIn";
 
 export default function Home() {
+  const [data, setData] = useState([]);
   const [expense, setExpense] = useState([]);
   const [amount, setAmount] = useState([]);
   const [total, setTotal] = useState(0);
@@ -31,6 +33,26 @@ const setUserData=(data)=>{
   console.log(data)
   setUser(data)
 }
+
+
+
+
+useEffect(() => {
+  async function fetchData() {
+    try {
+      const result = await fetchDataFromFirestore();
+      setData(result);
+      data.map((item) => {
+        setExpense(item.spends);
+        setAmount(item.cost);
+      })
+    } catch (error) {
+      // Handle the error
+    }
+  }
+
+  fetchData();
+}, []);
   return (
     <main>
       <div>
@@ -55,6 +77,7 @@ const setUserData=(data)=>{
           ))}
         </div>
         Total: {total}
+        
       </div>
     </main>
   );
