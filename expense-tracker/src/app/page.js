@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { signInWithPopup } from "firebase/auth";
-import { app, auth, provider } from "@/firebase/firebaseConfig"; // Import auth and provider directly from Firebase
+import SignIn from "./SignIn";
 
 export default function Home() {
   const [expense, setExpense] = useState([]);
@@ -12,8 +11,8 @@ export default function Home() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    const newItem = e.target.elements.item.value;
-    const newAmount = e.target.elements.amount.value;
+    const newItem = e.target.elements[0].value;
+    const newAmount = e.target.elements[1].value;
 
     if (!newItem || isNaN(newAmount)) {
       return;
@@ -23,27 +22,21 @@ export default function Home() {
     setAmount((prevAmount) => [...prevAmount, parseFloat(newAmount)]);
     setTotal(total + parseFloat(newAmount));
 
-    e.target.elements.item.value = "";
-    e.target.elements.amount.value = "";
+    e.target.elements[0].value = "";
+    e.target.elements[1].value = "";
   };
 
-  useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      setUser(user);
-    });
-  }, []);
-
-  const signIn = () => signInWithPopup(auth, provider);
-  const signOut = () => auth.signOut();
-
+  
+const setUserData=(data)=>{
+  console.log(data)
+  setUser(data)
+}
   return (
     <main>
       <div>
         <h3>Expense Tracker</h3>
-        <div>
-          <button onClick={signIn}>Sign In</button>
-          <button onClick={signOut}>Sign Out</button>
-        </div>
+        <SignIn  setUser={setUserData} />
+        
         <div>
           {user ? <span>{user.displayName}</span> : "No User"}
         </div>
@@ -51,7 +44,7 @@ export default function Home() {
           <form onSubmit={handleFormSubmit}>
             <input type='text' placeholder='Enter Item' name='item' />
             <input type='text' placeholder='Enter Amount' name='amount' />
-            <button type='submit'>Add</button>
+            <button type='submit'>A-d-d</button>
           </form>
         </div>
         <div>
