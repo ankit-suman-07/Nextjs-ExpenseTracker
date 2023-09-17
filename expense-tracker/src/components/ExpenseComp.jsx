@@ -5,7 +5,7 @@ import SignIn from "./SignIn";
 
 export const ExpenseComp = () => {
     const [expense, setExpense] = useState([]);
-  const [amount, setAmount] = useState([]);
+    const [amount, setAmount] = useState([]);
   const [total, setTotal] = useState(0);
   const [user, setUser] = useState(null);
 
