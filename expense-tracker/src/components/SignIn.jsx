@@ -8,19 +8,20 @@ import { useDispatch } from "react-redux";
 
 
 export default function SignIn(props) {
-  const [username, setuserName] = useState("");
+  const [userLoggedIn, setUserLoggedIn] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       props.setUser(user);
-      user && setuserName(user.displayName);
+      user && setUserLoggedIn(user);
+      user && dispatch(logIn({username: user.displayName }));
     });
   }, []);
 
   const signIn = () => {
     signInWithPopup(auth, provider);
-    dispatch(logIn(username));
+    
   }
   const signOut = () => {
     auth.signOut();
@@ -32,8 +33,12 @@ export default function SignIn(props) {
       <div>
         <h3>SignIn with google</h3>
         <div>
-          <button onClick={signIn}>Sign In</button>
-          <button onClick={signOut}>Sign Out</button>
+          {
+            userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
+              <button onClick={signIn}>Sign In</button>
+                    
+          }
+          
         </div>
         
       </div>
