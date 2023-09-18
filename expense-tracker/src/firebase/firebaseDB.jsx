@@ -14,14 +14,14 @@ const firestore = getFirestore(app);
 const spendsDoc = doc(firestore, 'expenses', 'username');
 
 
-export function writeExpenses(expenses, amounts, categories, dates, total) {
+export function writeExpenses(expense, amounts, categories, dates, total) {
   // Create an array of objects for each entry
-  const docData = expenses.map((expense, index) => ({
+  const docData = {
     spends: expense,
-    cost: amounts[index],
-    category: categories[index],
-    date: dates[index],
-  }));
+    cost: amounts,
+    category: categories,
+    date: dates,
+  };
 
   // Use setDoc to write the array of objects to Firestore
   setDoc(spendsDoc, { expenses: docData, total: total })
@@ -39,6 +39,7 @@ async function fetchDataFromFirestore() {
   
   try {
     const querySnapshot = await getDocs(collectionRef);
+    console.log(querySnapshot);
     const data = [];
 
     querySnapshot.forEach((doc) => {
@@ -50,7 +51,8 @@ async function fetchDataFromFirestore() {
       }
     });
     // console.log("Data : " +JSON.stringify(data[0]));
-    dispatch(addData(data[0]))
+    // dispatch(addData(data[0]))
+    console.log(data[0]);
     return data;
   } catch (error) {
     console.error("Error fetching data: ", error);

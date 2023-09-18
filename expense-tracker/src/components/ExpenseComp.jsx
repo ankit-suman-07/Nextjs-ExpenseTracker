@@ -10,18 +10,18 @@ import { setDoc } from "firebase/firestore";
 export const ExpenseComp = () => {
     const [expense, setExpense] = useState([]);
     const [amount, setAmount] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [category, setCategory] = useState([]);
-  const [date, setDate] = useState([]);
-  const [user, setUser] = useState(null);
+    const [total, setTotal] = useState(0);
+    const [category, setCategory] = useState([]);
+    const [date, setDate] = useState([]);
+    const [user, setUser] = useState(null);
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
   // Example usage in your component
-const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e) => {
   e.preventDefault();
 
-  const newItem = e.target.elements[0].value;
+    const newItem = e.target.elements[0].value;
   const newAmount = e.target.elements[1].value;
   const newCategory = e.target.elements[2].value;
   const newDate = e.target.elements[3].value;
@@ -31,54 +31,62 @@ const handleFormSubmit = (e) => {
   }
 
   // Update state with new entry data
-  setExpense((prev) => [...prev, newItem]);
-  setAmount((prev) => [...prev, parseFloat(newAmount)]);
-  setCategory((prev) => [...prev, newCategory]);
-  setDate((prev) => [...prev, newDate]);
-  setTotal(total + parseFloat(newAmount));
+  setExpense((prev) => [newItem, ...prev]);
+  setAmount((prev) => [parseFloat(newAmount), ...prev]);
+  setCategory((prev) => [newCategory, ...prev]);
+  setDate((prev) => [newDate, ...prev]);
+    setTotal(total + parseFloat(newAmount));
+     console.log(expense);
 
   // Call writeExpenses with arrays of entries
-  writeExpenses(expense, amount, category, date, total);
+  // writeExpenses(expense, amount, category, date, total);
 
   // Clear the form fields
   e.target.elements[0].value = "";
   e.target.elements[1].value = "";
   e.target.elements[2].value = "";
-  e.target.elements[3].value = "";
-};
-
-
-
-
+    e.target.elements[3].value = "";
+    
+  };
+  
+  
   
 const setUserData=(data)=>{
   console.log(data)
   setUser(data)
 }
 
-
-
-
 useEffect(() => {
   async function fetchData() {
     try {
       const result = await fetchDataFromFirestore();
-      // setData(result);
-      result.map((item) => {
-        setExpense(item.spends);
-        setAmount(item.cost);
-        setCategory(item.category);
-        setDate(item.date);
-        setTotal(item.total);
-        // setTotal(total + parseFloat(item.cost));
-      })
+      console.log(result);
+      if (result.length > 0) {
+          // Assuming result[0] contains the data you need
+          const item = result[0];
+          setExpense(item.spends || []);
+          setAmount(item.cost || []);
+          setCategory(item.category || []);
+          setDate(item.date || []);
+          setTotal(item.total || 0);
+        }
     } catch (error) {
-      // Handle the error
+      
     }
   }
 
+  
+
   fetchData();
 }, []);
+  
+  // Use useEffect to log the updated 'expense' state
+  useEffect(() => {
+    console.log(expense); // This will log the updated 'expense' state
+    writeExpenses(expense, amount, category, date, total);
+     dispatch(addData(expense, amount, category, date, total));
+  }, [expense]);
+
   return (
     <div>
         <h3>Expense Tracker</h3>
@@ -93,7 +101,7 @@ useEffect(() => {
           <input type='text' placeholder='Enter Amount' name='amount' />
           <input type='text' placeholder='Enter Category' name='category' />
           <input type='date' placeholder='Enter Date' name='date' />
-            <button type='submit'>A-d-d</button>
+          <button type='submit'>A-d-d</button>
           </form>
         </div>
         <div>
@@ -106,6 +114,7 @@ useEffect(() => {
       Total: {total}
       Category : {category}
       date: {date}
+      
     </div>
   )
 }

@@ -5,11 +5,13 @@ const initialState = {
         isAuth: false,
         username: "",
         
-        items: [],
-        amounts: [],
-        category: [],
-        date: [],
-        total: 0,
+        object: {
+            items: [],
+            amounts: [],
+            category: [],
+            date: [],
+            total: 0,
+        }
     }
 }
 
@@ -33,7 +35,7 @@ export const auth = createSlice({
             }
         },
         addData: (state, action) => {
-            console.log(action);
+            console.log("Action -> ", action);
             return {
                 value: {
                     objectData: {
