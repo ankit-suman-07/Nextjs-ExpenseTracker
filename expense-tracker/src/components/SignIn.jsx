@@ -7,6 +7,7 @@ import { logIn, logOut } from "@/redux/features/auth-slice";
 import { useDispatch } from "react-redux";
 
 
+
 export default function SignIn(props) {
   const [userLoggedIn, setUserLoggedIn] = useState("");
   const dispatch = useDispatch();
@@ -15,13 +16,13 @@ export default function SignIn(props) {
     auth.onAuthStateChanged(async (user) => {
       props.setUser(user);
       user && setUserLoggedIn(user);
-      user && dispatch(logIn({username: user.displayName }));
+      user && dispatch(logIn({ username: user.displayName }));
     });
   }, []);
 
   const signIn = () => {
     signInWithPopup(auth, provider);
-    
+
   }
   const signOut = () => {
     auth.signOut();
@@ -36,11 +37,11 @@ export default function SignIn(props) {
           {
             userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
               <button onClick={signIn}>Sign In</button>
-                    
+
           }
-          
+
         </div>
-        
+
       </div>
     </main>
   );

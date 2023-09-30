@@ -4,7 +4,7 @@ const initialState = {
     value: {
         isAuth: false,
         username: "",
-        
+
         object: {
             items: [],
             amounts: [],
@@ -35,19 +35,22 @@ export const auth = createSlice({
             }
         },
         addData: (state, action) => {
-            console.log("Action -> ", action);
+            const { expense, cost, category, date, total } = action.payload;
             return {
+                ...state,
                 value: {
-                    objectData: {
-                        items: action.payload.expense,
-                        amounts: action.payload.cost,
-                        category: action.payload.category,
-                        date: action.payload.date,
-                        total: action.payload.total,
+                    ...state.value,
+                    object: {
+                        items: expense,
+                        amounts: cost,
+                        category: category,
+                        date: date,
+                        total: total,
                     }
                 }
-            }
+            };
         }
+
     }
 })
 
