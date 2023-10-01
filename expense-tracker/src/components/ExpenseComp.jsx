@@ -14,6 +14,7 @@ export const ExpenseComp = () => {
   const [category, setCategory] = useState([]);
   const [date, setDate] = useState([]);
   const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState("");
 
   const dispatch = useDispatch();
 
@@ -59,7 +60,8 @@ export const ExpenseComp = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await fetchDataFromFirestore(dispatch);
+        console.log("Before setUsername : ", user.email);
+        const result = await fetchDataFromFirestore(dispatch, user.email);
         console.log(result);
         if (result.length > 0) {
           // Assuming result[0] contains the data you need
@@ -83,48 +85,61 @@ export const ExpenseComp = () => {
 
 
     fetchData();
-  }, [dispatch]);
+  }, [user]);
 
   // Use useEffect to log the updated 'expense' state
   useEffect(() => {
-    console.log(expense); // This will log the updated 'expense' state
+    console.log("Expense : ", expense); // This will log the updated 'expense' state
 
 
     dispatch(addData(expense, amount, category, date, total));
     if (user) {
+
       if (expense.length != 0) {
-        writeExpenses(expense, amount, category, date, total);
+        setUserName(user.displayName);
+        console.log("Disp Name : ", user.displayName);
+        writeExpenses(expense, amount, category, date, total, user.email);
       }
     }
   }, [expense]);
 
   return (
     <div>
-      <h3>Expense Tracker</h3>
-      <SignIn setUser={setUserData} />
+      {
+        user == null ?
+          <>
+            <h3>SignIn with google</h3>
+            <SignIn setUser={setUserData} />
+          </> :
+          <>
+            <h3>Expense Tracker</h3>
 
-      <div>
-        {user ? <span>{user.displayName}</span> : "No User"}
-      </div>
-      <div>
-        <form onSubmit={handleFormSubmit}>
-          <input type='text' placeholder='Enter Item' name='item' />
-          <input type='text' placeholder='Enter Amount' name='amount' />
-          <input type='text' placeholder='Enter Category' name='category' />
-          <input type='date' placeholder='Enter Date' name='date' />
-          <button type='submit'>A-d-d</button>
-        </form>
-      </div>
-      <div>
-        {expense.map((item, idx) => (
-          <div key={idx}>
-            {item} - {amount[idx]} - {category[idx]} - {date[idx]}
-          </div>
-        ))}
-      </div>
-      Total: {total}
-      Category : {category}
-      date: {date}
+            <SignIn setUser={setUserData} />
+            <div>
+              {user.displayName}
+            </div>
+            <div>
+              <form onSubmit={handleFormSubmit}>
+                <input type='text' placeholder='Enter Item' name='item' />
+                <input type='text' placeholder='Enter Amount' name='amount' />
+                <input type='text' placeholder='Enter Category' name='category' />
+                <input type='date' placeholder='Enter Date' name='date' />
+                <button type='submit'>A-d-d</button>
+              </form>
+            </div>
+            <div>
+              {expense.map((item, idx) => (
+                <div key={idx}>
+                  {item} - {amount[idx]} - {category[idx]} - {date[idx]}
+                </div>
+              ))}
+            </div>
+            Total: {total}
+            Category : {category}
+            date: {date}
+          </>
+      }
+
 
     </div>
   )

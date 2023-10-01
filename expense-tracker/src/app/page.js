@@ -7,13 +7,12 @@ import { ExpenseComp } from "@/components/ExpenseComp";
 import { useSelector } from "react-redux";
 
 export default function Home() {
-  const username = useSelector((state) => state.authReducer.value.username)
+  const username = useSelector((state) => state.authReducer.value.username);
   // console.log('Username  '  + username);
 
   return (
     <main  >
       <div className="main-page">
-        HomePage
         Username : ${username}
 
         <ExpenseComp />

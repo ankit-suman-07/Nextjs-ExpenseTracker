@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 
 
 
+
 export default function SignIn(props) {
   const [userLoggedIn, setUserLoggedIn] = useState("");
   const dispatch = useDispatch();
@@ -31,16 +32,14 @@ export default function SignIn(props) {
 
   return (
     <main>
+
       <div>
-        <h3>SignIn with google</h3>
-        <div>
-          {
-            userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
-              <button onClick={signIn}>Sign In</button>
+        {
+          userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
+            <button onClick={signIn}>Sign In</button>
 
-          }
+        }
 
-        </div>
 
       </div>
     </main>

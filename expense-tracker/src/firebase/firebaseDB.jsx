@@ -6,28 +6,20 @@ import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { app } from "./firebaseConfig"; // Import the app from the Firebase config file
 import { useDispatch } from "react-redux";
 import { addData } from "@/redux/features/auth-slice";
-import { useUsername } from "@/components/useUsername";
+import { useSelector } from "react-redux";
+import useUsername from "@/components/useUsername";
 
 
+// const username = useSelector((state) => state.authReducer.value.username);
 // Initialize Firestore
 const firestore = getFirestore(app);
-// const username = useSelector((state) => state.authReducer.value.username)
-
-// function returnUserName() {
-//   const username = useSelector((state) => state.authReducer.value.username);
-//   return username;
-// }
-
-const username = useUsername();
-// // Define the document reference
-const spendsDoc = doc(firestore, "expenses", username);
 
 
+export function writeExpenses(expense, amounts, categories, dates, total, userName) {
 
-export function writeExpenses(expense, amounts, categories, dates, total) {
+  // // Define the document reference
 
-
-
+  const spendsDoc = doc(firestore, userName, "expenses");
   // Create an array of objects for each entry
   const docData = {
     spends: expense,
@@ -49,8 +41,10 @@ export function writeExpenses(expense, amounts, categories, dates, total) {
 }
 
 
-async function fetchDataFromFirestore(dispatch) {
-  const collectionRef = collection(firestore, "expenses");
+async function fetchDataFromFirestore(dispatch, userName) {
+  console.log("fetch user name -> ", userName);
+
+  const collectionRef = collection(firestore, userName);
 
   try {
     const querySnapshot = await getDocs(collectionRef);
