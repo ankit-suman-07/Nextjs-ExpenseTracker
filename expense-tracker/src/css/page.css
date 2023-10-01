@@ -1,3 +1,4 @@
-.main-page {
-    border: 2px solid black;
+main {
+    /* border: 2px solid green; */
+    min-height: 100vh;
 }

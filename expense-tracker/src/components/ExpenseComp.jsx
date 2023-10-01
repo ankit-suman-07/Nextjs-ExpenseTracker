@@ -6,6 +6,11 @@ import { addData } from "@/redux/features/auth-slice";
 import { writeExpenses } from "../firebase/firebaseDB";
 import { setDoc } from "firebase/firestore";
 
+import { FirstScreen } from "./FirstScreen";
+import { PieChart } from "./PieChart";
+
+import "../css/ExpenseComp.css";
+
 
 export const ExpenseComp = () => {
   const [expense, setExpense] = useState([]);
@@ -18,7 +23,22 @@ export const ExpenseComp = () => {
 
   const dispatch = useDispatch();
 
-  // Example usage in your component
+  const categories = ["Rent", "Outing", "Trip", "Gadgets", "Grocery", "Cafe", "Travel", "Subscription", "Tax"];
+  const categoryTotal = {
+    Rent: 0,
+    Outing: 0,
+    Trip: 0,
+    Gadgets: 0,
+    Grocery: 0,
+    Cafe: 0,
+    Travel: 0,
+    Subscription: 0,
+    Tax: 0,
+  };
+
+
+
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -45,7 +65,7 @@ export const ExpenseComp = () => {
     // Clear the form fields
     e.target.elements[0].value = "";
     e.target.elements[1].value = "";
-    e.target.elements[2].value = "";
+    e.target.elements[2].value = "Select";
     e.target.elements[3].value = "";
 
   };
@@ -76,10 +96,15 @@ export const ExpenseComp = () => {
           setTotal(item.total || 0);
           console.log('---->');
           console.log(item);
+          expense.map((item, idx) => {
+            categoryTotal.category[idx] += amount[idx];
+          });
         }
+
       } catch (error) {
 
       }
+
     }
 
 
@@ -104,39 +129,93 @@ export const ExpenseComp = () => {
   }, [expense]);
 
   return (
-    <div>
+    <div className="expense-comp" >
       {
         user == null ?
           <>
-            <h3>SignIn with google</h3>
-            <SignIn setUser={setUserData} />
+            <nav>
+              <div className="logo" >
+                Tracker.
+              </div>
+              {/* <div className="prompt" >
+              Sign In With Google
+            </div> */}
+              <SignIn setUser={setUserData} />
+            </nav>
+            <FirstScreen />
           </> :
           <>
-            <h3>Expense Tracker</h3>
+            <nav>
+              <div className="logo" >
+                Tracker.
+              </div>
 
-            <SignIn setUser={setUserData} />
-            <div>
-              {user.displayName}
+              <div className="prompt" >
+                Hi, {user.displayName}
+              </div>
+              <SignIn setUser={setUserData} />
+            </nav>
+            <div className="main-screen" >
+
+
+              <div className="box form" >
+                <form onSubmit={handleFormSubmit}>
+                  <input type='text' placeholder='Enter Item' name='item' />
+                  <input type='text' placeholder='Enter Amount' name='amount' />
+                  {/* <input type='text' placeholder='Enter Category' name='category' /> */}
+                  <select name="category" id="category" >
+                    <option value="Select" disabled default>Select Category</option>
+                    {
+                      categories.map((category) => (
+                        <option value={category}>{category}</option>
+                      ))
+                    }
+
+                  </select>
+                  <input type='date' placeholder='Enter Date' name='date' />
+                  <button type='submit' className="add-btn" >Add Expense</button>
+                </form>
+              </div>
+
+              <div className="box expense-list" >
+                {expense.map((item, idx) => (
+                  <div key={idx} className="expense-element" >
+                    <span> {item} </span>
+                    <span> {amount[idx]} </span>
+                    <span> {category[idx]} </span>
+                    <span> {date[idx]} </span>
+
+                  </div>
+                ))}
+              </div>
+
+              <div className="box pie-chart" >
+                <PieChart expense={expense} amount={amount} />
+              </div>
+
+              <div className="box total-expend" >
+                Total: {total}
+
+                {
+                  Object.keys(categoryTotal).forEach(function (key, index) {
+
+                    <>
+                      <span>{key}</span>
+                      <span>{categoryTotal[key]}</span>
+                    </>
+                  })
+                }
+                {Object.entries(categoryTotal).map(([key, value]) => (
+                  <li key={key}>
+                    <strong>{key}:</strong> {value}
+                  </li>
+                ))}
+              </div>
+
+              <div className="box bar-graph" >
+                Bar Graph
+              </div>
             </div>
-            <div>
-              <form onSubmit={handleFormSubmit}>
-                <input type='text' placeholder='Enter Item' name='item' />
-                <input type='text' placeholder='Enter Amount' name='amount' />
-                <input type='text' placeholder='Enter Category' name='category' />
-                <input type='date' placeholder='Enter Date' name='date' />
-                <button type='submit'>A-d-d</button>
-              </form>
-            </div>
-            <div>
-              {expense.map((item, idx) => (
-                <div key={idx}>
-                  {item} - {amount[idx]} - {category[idx]} - {date[idx]}
-                </div>
-              ))}
-            </div>
-            Total: {total}
-            Category : {category}
-            date: {date}
           </>
       }
 

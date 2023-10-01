@@ -6,7 +6,7 @@ import { auth, provider } from "@/firebase/firebaseConfig"; // Import auth and p
 import { logIn, logOut } from "@/redux/features/auth-slice";
 import { useDispatch } from "react-redux";
 
-
+import "../css/SignIn.css";
 
 
 export default function SignIn(props) {
@@ -31,17 +31,12 @@ export default function SignIn(props) {
   }
 
   return (
-    <main>
+    <div className="signin-comp" >
+      {
+        userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
+          <button onClick={signIn}>Sign In</button>
 
-      <div>
-        {
-          userLoggedIn ? <button onClick={signOut}>Sign Out</button> :
-            <button onClick={signIn}>Sign In</button>
-
-        }
-
-
-      </div>
-    </main>
+      }
+    </div>
   );
 }
