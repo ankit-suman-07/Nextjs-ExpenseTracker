@@ -1,26 +1,17 @@
 // dataService.js
-import { db } from "./firebaseConfig";
-import { arrayUnion } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { app } from "./firebaseConfig"; // Import the app from the Firebase config file
-import { useDispatch } from "react-redux";
+import { app } from "./firebaseConfig";
 import { addData } from "@/redux/features/auth-slice";
-import { useSelector } from "react-redux";
-import useUsername from "@/components/useUsername";
 
 
-// const username = useSelector((state) => state.authReducer.value.username);
-// Initialize Firestore
 const firestore = getFirestore(app);
 
 
 export function writeExpenses(expense, amounts, categories, dates, total, userName) {
 
-  // // Define the document reference
 
   const spendsDoc = doc(firestore, userName, "expenses");
-  // Create an array of objects for each entry
   const docData = {
     spends: expense,
     cost: amounts,
@@ -30,7 +21,6 @@ export function writeExpenses(expense, amounts, categories, dates, total, userNa
   };
 
 
-  // Use setDoc to write the array of objects to Firestore
   setDoc(spendsDoc, { expenses: docData, total: total })
     .then(() => {
       console.log("Document successfully written!");
@@ -42,14 +32,11 @@ export function writeExpenses(expense, amounts, categories, dates, total, userNa
 
 
 async function fetchDataFromFirestore(dispatch, userName) {
-  console.log("fetch user name -> ", userName);
 
   const collectionRef = collection(firestore, userName);
 
   try {
     const querySnapshot = await getDocs(collectionRef);
-    console.log("Query : ", querySnapshot);
-    console.log(querySnapshot);
     const data = [];
 
     querySnapshot.forEach((doc) => {
@@ -60,9 +47,6 @@ async function fetchDataFromFirestore(dispatch, userName) {
         });
       }
     });
-    // console.log("Data : " +JSON.stringify(data[0]));
-    // dispatch(addData(data[0]))
-    console.log("This :->  ", data);
     dispatch(addData(data));
     return data;
   } catch (error) {

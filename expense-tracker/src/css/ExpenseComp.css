@@ -1,10 +1,5 @@
-.expense-comp {
-    /* border: 2px solid black; */
-
-}
-
 nav {
-    background-color: #333333;
+    background-color: #222222;
     border-radius: 10px;
     height: 60px;
     display: flex;
@@ -41,7 +36,7 @@ nav {
     border-radius: 10px;
     height: 350px;
     overflow: hidden;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
 }
 
 form {
@@ -57,7 +52,7 @@ form {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #d29b59;
+    background-color: #f6e7e5;
 }
 
 input,
@@ -93,11 +88,16 @@ select,
     font-weight: 600;
 }
 
+.expense-line {
+    background-color: #fff;
+    font-size: 12px;
+}
+
 .expense-list {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #a24f46;
+    background-color: #f1e0d1;
 }
 
 .expense-outer {
@@ -126,9 +126,7 @@ select,
 }
 
 .expense-element span {
-    border: 1px solid black;
     height: 30px;
-    font-size: 14px;
     font-weight: 500;
     display: flex;
     justify-content: center;
@@ -151,10 +149,10 @@ select,
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #e3d9cf;
 }
 
 .pie-chart-style {
-    border: 2px solid green;
     width: 200px;
 }
 
@@ -166,15 +164,19 @@ select,
     align-items: center;
 }
 
+.cat-total-units {
+    background-color: #fff;
+}
+
 .total-expend {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #d3b66e;
+    background-color: #f4efd7;
 }
 
 .top-spends {
-    background-color: #8e4d63;
+    background-color: #d1dac3;
 }
 
 .top-spends-outer {
@@ -182,6 +184,10 @@ select,
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.bar-graph {
+    background-color: #ededed;
 }
 
 @media only screen and (max-width: 900px) {
@@ -193,5 +199,13 @@ select,
 @media only screen and (max-width: 600px) {
     .main-screen {
         grid-template-columns: 1fr;
+    }
+
+    nav {
+        font-size: 20px;
+    }
+
+    .prompt {
+        font-size: 12px;
     }
 }

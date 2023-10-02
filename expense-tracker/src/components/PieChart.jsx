@@ -10,8 +10,6 @@ export const PieChart = (props) => {
     const amountArr = props.amount;
     const categoryArr = props.category;
 
-
-
     const categoryTotals = {};
 
     expenseArr.forEach((category, index) => {
@@ -32,14 +30,14 @@ export const PieChart = (props) => {
             y: total,
             label: category,
         });
-        return null; // Remember to return something in a map function
+        return null;
     });
 
 
     const options = {
         // exportEnabled: true,
         animationEnabled: true,
-        // backgroundColor: "#F5DEB3",
+        backgroundColor: "#e3d9cf",
         width: 300,
         height: 200,
         data: [{

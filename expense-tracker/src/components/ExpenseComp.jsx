@@ -4,7 +4,6 @@ import { fetchDataFromFirestore } from "../firebase/firebaseDB";
 import SignIn from "./SignIn";
 import { addData } from "@/redux/features/auth-slice";
 import { writeExpenses } from "../firebase/firebaseDB";
-import { setDoc } from "firebase/firestore";
 
 import { FirstScreen } from "./FirstScreen";
 import { PieChart } from "./PieChart";
@@ -27,17 +26,6 @@ export const ExpenseComp = () => {
   const dispatch = useDispatch();
 
   const categories = ["Rent", "Outing", "Trip", "Gadgets", "Grocery", "Cafe", "Travel", "Subscription", "Tax"];
-  const categoryTotal = {
-    Rent: 0,
-    Outing: 0,
-    Trip: 0,
-    Gadgets: 0,
-    Grocery: 0,
-    Cafe: 0,
-    Travel: 0,
-    Subscription: 0,
-    Tax: 0,
-  };
 
 
 
@@ -60,19 +48,14 @@ export const ExpenseComp = () => {
     setCategory((prev) => [newCategory, ...prev]);
     setDate((prev) => [newDate, ...prev]);
     setTotal(total + parseFloat(newAmount));
-    console.log(expense);
 
-    // Call writeExpenses with arrays of entries
-    // writeExpenses(expense, amount, category, date, total);
 
-    // Clear the form fields
     e.target.elements[0].value = "";
     e.target.elements[1].value = "";
     e.target.elements[2].value = "Select";
     e.target.elements[3].value = "";
 
   };
-
 
 
   const setUserData = (data) => {
@@ -83,22 +66,16 @@ export const ExpenseComp = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log("Before setUsername : ", user.email);
         const result = await fetchDataFromFirestore(dispatch, user.email);
-        console.log(result);
         if (result.length > 0) {
           // Assuming result[0] contains the data you need
           const item = result[0];
-          console.log("Item : ", item);
-          console.log("spends : ", item.expenses.spends);
 
           setExpense(item.expenses.spends || []);
           setAmount(item.expenses.cost || []);
           setCategory(item.expenses.category || []);
           setDate(item.expenses.date || []);
           setTotal(item.total || 0);
-          console.log('---->');
-          console.log(item);
           expense.map((item, idx) => {
             categoryTotal.category[idx] += amount[idx];
           });
@@ -115,17 +92,13 @@ export const ExpenseComp = () => {
     fetchData();
   }, [user]);
 
-  // Use useEffect to log the updated 'expense' state
   useEffect(() => {
-    console.log("Expense : ", expense); // This will log the updated 'expense' state
-
 
     dispatch(addData(expense, amount, category, date, total));
     if (user) {
 
       if (expense.length != 0) {
         setUserName(user.displayName);
-        console.log("Disp Name : ", user.displayName);
         writeExpenses(expense, amount, category, date, total, user.email);
       }
     }
@@ -140,9 +113,6 @@ export const ExpenseComp = () => {
               <div className="logo" >
                 Tracker.
               </div>
-              {/* <div className="prompt" >
-              Sign In With Google
-            </div> */}
               <SignIn setUser={setUserData} />
             </nav>
             <FirstScreen />
@@ -158,15 +128,13 @@ export const ExpenseComp = () => {
               </div>
               <SignIn setUser={setUserData} />
             </nav>
+
             <div className="main-screen" >
-
-
               <div className="box form" >
 
                 <form onSubmit={handleFormSubmit}>
                   <input type='text' placeholder='Enter Item' name='item' />
                   <input type='text' placeholder='Enter Amount' name='amount' />
-                  {/* <input type='text' placeholder='Enter Category' name='category' /> */}
                   <select name="category" id="category" >
                     <option value="Select" disabled default>Select Category</option>
                     {
@@ -195,18 +163,16 @@ export const ExpenseComp = () => {
                     </>
                     {expense.map((item, idx) => (
                       <>
-                        <span> {item} </span>
-                        <span> {amount[idx]} </span>
-                        <span> {category[idx]} </span>
-                        <span> {date[idx]} </span>
+                        <span className="expense-line" > {item} </span>
+                        <span className="expense-line" > {amount[idx]} </span>
+                        <span className="expense-line" > {category[idx]} </span>
+                        <span className="expense-line" > {date[idx]} </span>
                       </>
 
                     ))}
                   </div>
                 </div>
               </div>
-
-
 
               <div className="box total-expend" >
                 <div className="box-head" >
@@ -217,7 +183,6 @@ export const ExpenseComp = () => {
                   <span className='card-total-head' >Total</span>
                   <span>$ {total}</span>
                 </div>
-
               </div>
 
               <div className="box pie-chart" >
@@ -227,7 +192,6 @@ export const ExpenseComp = () => {
                 <div className="pie-chart-outer" >
                   <PieChart expense={expense} amount={amount} category={category} />
                 </div>
-
               </div>
 
               <div className="box bar-graph" >
@@ -237,7 +201,6 @@ export const ExpenseComp = () => {
                 <div className="pie-chart-outer" >
                   <LineChart amount={amount} date={date} />
                 </div>
-
               </div>
               <div className="box top-spends" >
                 <div className="box-head" >

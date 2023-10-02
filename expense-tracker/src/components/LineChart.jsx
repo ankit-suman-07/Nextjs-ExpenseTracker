@@ -10,7 +10,6 @@ const LineChart = (props) => {
 
     const monthTotals = {};
 
-    // Assuming dateArr contains date strings
     dateArr.forEach((dateString, index) => {
         const amount = amountArr[index];
         const date = new Date(dateString);
@@ -29,7 +28,6 @@ const LineChart = (props) => {
 
     const sortedMonthKeys = Object.keys(monthTotals).sort();
 
-    // Convert sorted keys into the desired dataPoints format
     const dataArr = sortedMonthKeys.map(monthKey => {
         const [year, month] = monthKey.split('-');
         return {
@@ -38,10 +36,6 @@ const LineChart = (props) => {
         };
     }
     )
-
-
-
-
 
     const options = {
         animationEnabled: true,
@@ -58,6 +52,7 @@ const LineChart = (props) => {
         },
         width: 450,
         height: 280,
+        backgroundColor: "#ededed",
         data: [{
             yValueFormatString: "$#,###",
             xValueFormatString: "MMMM",
