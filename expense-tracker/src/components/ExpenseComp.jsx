@@ -8,6 +8,9 @@ import { setDoc } from "firebase/firestore";
 
 import { FirstScreen } from "./FirstScreen";
 import { PieChart } from "./PieChart";
+import LineChart from "./LineChart";
+import { CatTotal } from "./CatTotal";
+import { TopSpends } from "./TopSpends";
 
 import "../css/ExpenseComp.css";
 
@@ -159,6 +162,7 @@ export const ExpenseComp = () => {
 
 
               <div className="box form" >
+
                 <form onSubmit={handleFormSubmit}>
                   <input type='text' placeholder='Enter Item' name='item' />
                   <input type='text' placeholder='Enter Amount' name='amount' />
@@ -178,42 +182,71 @@ export const ExpenseComp = () => {
               </div>
 
               <div className="box expense-list" >
-                {expense.map((item, idx) => (
-                  <div key={idx} className="expense-element" >
-                    <span> {item} </span>
-                    <span> {amount[idx]} </span>
-                    <span> {category[idx]} </span>
-                    <span> {date[idx]} </span>
+                <div className="box-head" >
+                  All Expenses
+                </div>
+                <div className="expense-outer" >
+                  <div className="expense-element" >
+                    <>
+                      <span className="expense-head" > Item </span>
+                      <span className="expense-head" > Amount </span>
+                      <span className="expense-head" > Category </span>
+                      <span className="expense-head" > Date </span>
+                    </>
+                    {expense.map((item, idx) => (
+                      <>
+                        <span> {item} </span>
+                        <span> {amount[idx]} </span>
+                        <span> {category[idx]} </span>
+                        <span> {date[idx]} </span>
+                      </>
 
+                    ))}
                   </div>
-                ))}
+                </div>
+              </div>
+
+
+
+              <div className="box total-expend" >
+                <div className="box-head" >
+                  Category-Wise Totals
+                </div>
+                <CatTotal expense={expense} amount={amount} category={category} />
+                <div className="cat-total-units total" >
+                  <span className='card-total-head' >Total</span>
+                  <span>$ {total}</span>
+                </div>
+
               </div>
 
               <div className="box pie-chart" >
-                <PieChart expense={expense} amount={amount} />
-              </div>
+                <div className="box-head" >
+                  Category-Wise Spends
+                </div>
+                <div className="pie-chart-outer" >
+                  <PieChart expense={expense} amount={amount} category={category} />
+                </div>
 
-              <div className="box total-expend" >
-                Total: {total}
-
-                {
-                  Object.keys(categoryTotal).forEach(function (key, index) {
-
-                    <>
-                      <span>{key}</span>
-                      <span>{categoryTotal[key]}</span>
-                    </>
-                  })
-                }
-                {Object.entries(categoryTotal).map(([key, value]) => (
-                  <li key={key}>
-                    <strong>{key}:</strong> {value}
-                  </li>
-                ))}
               </div>
 
               <div className="box bar-graph" >
-                Bar Graph
+                <div className="box-head" >
+                  Monthly Spends
+                </div>
+                <div className="pie-chart-outer" >
+                  <LineChart amount={amount} date={date} />
+                </div>
+
+              </div>
+              <div className="box top-spends" >
+                <div className="box-head" >
+                  Top Spends
+                </div>
+                <div className="top-spends-outer" >
+                  <TopSpends expense={expense} amount={amount} />
+                </div>
+
               </div>
             </div>
           </>

@@ -4,8 +4,8 @@
 }
 
 nav {
-    border: 2px solid rebeccapurple;
     background-color: #333333;
+    border-radius: 10px;
     height: 60px;
     display: flex;
     justify-content: space-between;
@@ -37,12 +37,17 @@ nav {
 }
 
 .box {
-    border: 2px solid black;
-    min-height: 250px;
+    /* border: 2px solid black; */
+    border-radius: 10px;
+    height: 350px;
+    overflow: hidden;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 form {
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    border-radius: 5px;
+    background-color: #fff;
     width: 70%;
     display: flex;
     flex-direction: column;
@@ -52,24 +57,72 @@ form {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #d29b59;
 }
 
 input,
 select,
 .add-btn {
     border: 2px solid black;
+    border-radius: 5px;
     padding: 5px;
     margin: 5px;
 }
 
-.add-btn {}
+.add-btn {
+    background-color: #333333;
+    color: #d3b66e;
+    font-weight: 600;
+}
 
 .expense-element {
     /* border: 2px solid red; */
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 0.9fr 0.9fr 1.2fr 1fr;
     grid-gap: 5px;
     margin: 5px 0 5px 0;
+}
+
+.expense-element span {
+    border-radius: 5px;
+}
+
+.expense-head {
+    background-color: #333333;
+    color: #fff;
+    font-weight: 600;
+}
+
+.expense-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #a24f46;
+}
+
+.expense-outer {
+    /* border: 2px solid green; */
+    padding: 5px;
+    height: calc(300px);
+    overflow-y: auto;
+}
+
+/* Hide the scrollbar */
+.expense-outer::-webkit-scrollbar {
+    width: 0.0em;
+    /* Set the width of the scrollbar */
+}
+
+/* Hide the scrollbar track */
+.expense-outer::-webkit-scrollbar-track {
+    background-color: transparent;
+    /* Set the background color of the track */
+}
+
+/* Hide the scrollbar handle */
+.expense-outer::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    /* Set the color of the handle */
 }
 
 .expense-element span {
@@ -77,6 +130,55 @@ select,
     height: 30px;
     font-size: 14px;
     font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-head {
+    border: 2px solid #333333;
+    background-color: #333333;
+    height: 40px;
+    color: #ffff;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pie-chart {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pie-chart-style {
+    border: 2px solid green;
+    width: 200px;
+}
+
+.pie-chart-outer {
+    /* border: 2px solid red; */
+    height: calc(100% - 40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.total-expend {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #d3b66e;
+}
+
+.top-spends {
+    background-color: #8e4d63;
+}
+
+.top-spends-outer {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

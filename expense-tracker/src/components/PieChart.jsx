@@ -1,28 +1,61 @@
 import React from 'react';
 import "../css/PieChart.css";
+import Demo from './LineChart';
+import CanvasJSReact from '@canvasjs/react-charts';
+
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export const PieChart = (props) => {
     const expenseArr = props.expense;
     const amountArr = props.amount;
+    const categoryArr = props.category;
 
-    const categoryTotals = expenseArr.reduce((acc, category, index) => {
-        if (acc[category]) {
-            acc[category] += amountArr[index];
+
+
+    const categoryTotals = {};
+
+    expenseArr.forEach((category, index) => {
+        const categoryName = categoryArr[index];
+        const amount = amountArr[index];
+
+        if (categoryTotals[categoryName]) {
+            categoryTotals[categoryName] += amount;
         } else {
-            acc[category] = amountArr[index];
+            categoryTotals[categoryName] = amount;
         }
-        return acc;
-    }, {});
+    });
+
+    const dataArr = [];
+
+    Object.entries(categoryTotals).map(([category, total], index) => {
+        dataArr.push({
+            y: total,
+            label: category,
+        });
+        return null; // Remember to return something in a map function
+    });
+
+
+    const options = {
+        // exportEnabled: true,
+        animationEnabled: true,
+        // backgroundColor: "#F5DEB3",
+        width: 300,
+        height: 200,
+        data: [{
+            type: "doughnut",
+            startAngle: 0,
+            toolTipContent: "<b>{label}</b>: {y}",
+
+            indexLabelFontSize: 14,
+            indexLabel: "{label}",
+            dataPoints: dataArr,
+        }]
+    };
 
     return (
-        <div>
-            <ul>
-                {Object.entries(categoryTotals).map(([category, total]) => (
-                    <li key={category}>
-                        {category}: {total}
-                    </li>
-                ))}
-            </ul>
+        <div className='pie-chart-comp' >
+            <CanvasJSChart options={options} />
         </div>
     )
 }
