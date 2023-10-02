@@ -19,7 +19,7 @@ export default function SignIn(props) {
       user && setUserLoggedIn(user);
       user && dispatch(logIn({ username: user.displayName }));
     });
-  }, []);
+  }, [dispatch, props]);
 
   const signIn = () => {
     signInWithPopup(auth, provider);

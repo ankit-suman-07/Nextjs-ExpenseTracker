@@ -90,7 +90,7 @@ export const ExpenseComp = () => {
 
 
     fetchData();
-  }, [user]);
+  }, [user, amount, dispatch, expense]);
 
   useEffect(() => {
 
@@ -102,7 +102,7 @@ export const ExpenseComp = () => {
         writeExpenses(expense, amount, category, date, total, user.email);
       }
     }
-  }, [expense]);
+  }, [expense, amount, category, date, dispatch, total, user]);
 
   return (
     <div className="expense-comp" >
@@ -138,8 +138,8 @@ export const ExpenseComp = () => {
                   <select name="category" id="category" >
                     <option value="Select" disabled default>Select Category</option>
                     {
-                      categories.map((category) => (
-                        <option value={category}>{category}</option>
+                      categories.map((category, idx) => (
+                        <option key={idx} value={category}>{category}</option>
                       ))
                     }
 
